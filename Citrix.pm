@@ -2,9 +2,10 @@
 # - Aim to ease up Citrix module use by including all the sub-modules here
 # and allowing merely "use Citrix;" in the application
 # TODO:
-# - Provide porting guide ...
+# - Provide porting guide ... (???)
 # - CitrixPortal.pm
-# - Deprecate Citrix::Config.pm ? maybe leave for farms
+# DONE
+# - Deprecated Citrix::Config.pm ? maybe leave for farms
 # - Farms: uses 'farmid'
 # Allow loading config from DB
 
@@ -15,7 +16,7 @@ use Citrix::Farm;
 #use Citrix::Config;
 use Citrix::LaunchMesg;
 
-our $VERSION = '0.24';
+our $VERSION = '0.25';
 
 =head1 NAME
 
@@ -70,7 +71,7 @@ our $touts = {'host' => 10, 'user' => 5, 'op' => 5,};
 =head2 my Citrix::loadconfig($fname);
 
 Load Farm Configuration from a file in perl format. The file should "return" an array
-of (non blessed) Citrix::Farm hashes with keys describe in Citrix::Farm
+of (non blessed) Citrix::Farm hashes with keys described in L<Citrix::Farm> module
 (all this as a result of underlying "require()").
 Do not terminate this config file with the traditional "1;" true value (the array
 returned will be the true value).
@@ -88,7 +89,18 @@ return a hash(ref) keyed by farm id (instead or array(ref) ).
 Farm id keys are usually chosen to be short name string (Example 'la' for Los Angeles farm), see Citrix::Farm.
 Passing keyword param 'sort' set to valid Farm attribute value makes getfarms() return farm set array sorted by
 atribute ('sort' and 'idx' don't work together).
- 
+
+=head2 Citrix::loadconfig_db($dbh)
+
+Load Citrix Farms from DB using DBI connection $dbh.
+Method stores L<Citrix::Farm> entries in $Citrix::farms for later access.
+Use Citrix::getfarms() to access farm info (see L<Citrix>).
+
+Useful in bigger environments with world-wide multi-farm Citrix system layout.
+Notice that Citrix::* modules are not tightly coupled with perl DBI, but to use
+this method you do need DBI to to establish the connection.
+
+
 =cut
 
 # Load Farm Configuration
@@ -100,6 +112,22 @@ sub loadconfig {
    };
    if ($@) {die("No Farms Cached or config file found: $!\n");}
    return($farms);
+}
+
+sub loadconfig_db {
+   my ($dbh, %opt) = @_;
+   my $tn = $opt{'tabname'} || $farmtabname;
+   my $w = " WHERE active = 1";
+   my $qs = "SELECT * FROM $tn $w ";
+   my $arr = $dbh->selectall_arrayref($qs, {Slice => {} });
+ 
+   my @farms = map({
+      $_->{'hosts'} = [split(/,\s*/, $_->{'hosts'})];
+      $_->{'apps'} = [split(/,\s*/, $_->{'apps'})];
+      #DEBUG:print("Entry:\n".Dumper($_));
+      bless($_, 'Citrix::Farm');
+   } @$arr);
+   return(\@farms);
 }
 
 # Get Array of farm configs.

@@ -1,6 +1,16 @@
+package Citrix::SessionSet;
+use Data::Dumper;
+#use strict;
+#use warnings;
+
+our $VERSION = "0.25";
+
+# TODO: Allow loading sessions from perl cache file or DB for mock testing
+# # http://support.citrix.com/proddocs/index.jsp?topic=/ps-unix/ps-unix-cmd-ref-commands-ctxquery.html
+
 =head1 NAME
 
-Query UNIX Citrix Sessions from a Citrix Farm.
+Citrix::SessionSet - Query UNIX Citrix Sessions from a Citrix Farm.
 
 =head1 DESCRIPTION
 
@@ -25,22 +35,8 @@ also be single app like X-Terminal, Mail Client or Word processor.
 
 =cut
 
-# TODO:
-# Citrix namespace (sessionset, op), assoc. subdir
-# - Makefile.PL, Changes
-# - Inc ver 
 
-# - Shorten ctxbinpath ...
-# - Keep farm pool in to pack ::config
-# - Allow loading conf from DB
-# # http://support.citrix.com/proddocs/index.jsp?topic=/ps-unix/ps-unix-cmd-ref-commands-ctxquery.html
 
-package Citrix::SessionSet;
-
-use Data::Dumper;
-#use strict;
-#use warnings;
-our $VERSION = "0.24";
 
 # Use -f for short format opts -o For long fmt options
 # See p. 234 in Citrix Guide
@@ -67,8 +63,8 @@ These turn into hash keys in the sessionset collection.
 
 =head2 $Citrix::SessionSet::debug
 
-Class level "global" debugging (Notice that also instance has a debug flag). Set to true to
-troubleshoot SessionSet retrieval.
+Class level "global" debugging level (Notice that also instance has a debug flag). Set to true to
+troubleshoot Citrix::SessionSet retrieval.
 
 =cut
 
@@ -352,3 +348,5 @@ sub hin {
 1;
 
 #__END__
+# =head2 NOTES
+# 

@@ -1,8 +1,19 @@
-# TODO: Now use accessors on Farm
+package Citrix::LaunchMesg;
+#use strict;
+#use warnings;
+
+use Storable ('dclone');
+our $VERSION = '0.25';
+
+# TODO:
+# - Create a more precise description of what (keys) is in the session config sections
+# DONE:
+# - Now use accessors on Farm
+# - Generate message into a string, no direct output.
 
 =head1 NAME
 
-Generate Citrix session launch messages in format understood by Citrix Desktop Clients.
+Citrix::LaunchMesg - Generate Citrix session launch messages in format understood by Citrix Desktop Clients.
 
 =head1 DESCRIPTION
  
@@ -42,15 +53,9 @@ launch message sections used for constructing the launch message (by Citrix::Lau
 
 =cut
 
-# TODO:
-# - Should probably generate message into a string, no direct output.
-# - Create a more precise description of what (keys) is in the session config sections
-package Citrix::LaunchMesg;
-use strict;
-use warnings;
 
-use Storable ('dclone');
-our $VERSION = '0.24';
+
+
 our ($foo, $bar);
 # Keyword param Attributes of constructor for templates
 our @tattr = ('client','app',);
@@ -73,7 +78,7 @@ existing one. Options (%opt) are:
 
 =back
 
-For an example / quick reference see file 'session_template.pl' in source distribution.
+For an example / quick reference on above section see file 'session_template.pl' in source distribution.
 
 =cut
 

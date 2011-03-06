@@ -1,9 +1,10 @@
 package Citrix::Farm;
-# TODO: Change to use new keys, Change POD as well
+# DONE: Change to use new keys, Change POD as well
+our $VERSION = '0.25';
 
 =head1 NAME
 
-Citrix Farm Context / Configuration.
+Citrix::Farm - Citrix Farm Context Configuration.
 
 =head1 DESCRIPTION
 
@@ -24,8 +25,6 @@ Citrix Farm with following members:
 
 =item hosts - List of hosts (Including master host) available on farm
 
-
-
 =back
 
 
@@ -36,8 +35,7 @@ For now the accessor methods or class work only as getters.
 
 =head1 METHODS
 
-Class contains only getter methods. The simple Farm model has no application logic related
-methods.
+The simple Farm model class contains mostly simple getter methods.
 
 =over 4
 
@@ -57,20 +55,17 @@ methods.
 
 Note once more that these accessor methods only work as getters (see above). 
 
-=head1 BUGS
+=head2 $farminfo = $fc->getfarminfo();
 
-This simple "model" of Farm context / configuration makes an assumption
-that all listed applications are available on all listed hosts of the farm.
-However application using these modules may have additional
-configuration (hash members) to refine this simplified model.
-
-=head1 METHODS
+Retrieve Farm info about Farm apps/hosts (by Farm Context).
+This query is possibly slow and unreliable (if some hosts
+are down on the farm). Return Farm Info as array(ref).
 
 =cut
 
 #OLD:=item s - Optional Sequence number (to explicitly order farms within farm collection)
 
-our $VERSION = '0.24';
+
 
 # Read-only accessors. Config is assumed to be maintained externally and loaded asis
 # with no need to "tinker".
@@ -83,14 +78,6 @@ sub hosts       {$_[0]->{'hosts'};}
 
 # Method Aliases
 *Citrix::Farm::mh = \&Citrix::Farm::masterhost;
-
-=head2 $farminfo = $fc->getfarminfo();
-
-Retrieve Farm info about Farm apps/hosts (by Farm Context).
-This query is possibly slow and unreliable (if some hosts
-are down on the farm). Return Farm Info as array(ref).
-
-=cut
 
 sub getfarminfo {
    my ($fc) = @_;
@@ -137,5 +124,15 @@ sub getfarminfo {
    $fc->{'apphost'} = \%apphost; # Index ?!
    return($arr);
 }
+__END__
+
+=head1 BUGS
+
+This simple "model" of Farm context / configuration makes an assumption
+that all listed applications are available on all listed hosts of the farm.
+However application using these modules may have additional
+configuration (hash members) to refine this simplified model.
+
+=cut
 
 1;

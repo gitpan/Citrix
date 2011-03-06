@@ -1,3 +1,9 @@
+package Citrix::SessOp;
+#use strict;
+#use warnings;
+
+our $VERSION = "0.25";
+
 =head1 NAME
 
 Citrix::SessOp - Disconnect or Logoff from an existing Citrix Session.
@@ -7,7 +13,7 @@ Citrix::SessOp - Disconnect or Logoff from an existing Citrix Session.
 Control Citrix session state by launching associated command line utilities.
 The module user should take care of gaining authority to (by host/user,
 whatever) execute these commands successfully on Citrix Farm as the
-current process running user (It seems Citrix commands / protocol map the user
+current process runtime user (It seems Citrix commands and associated protocol map the user
 1-to-1 to the server end). Lacking this permission the commands will fail.
 
 Module aims to provide proper return values and error messages
@@ -29,18 +35,9 @@ of proper permissions (for lauching Citrix commands) with your local Citrix Admi
 
 =head1 METHODS
 
-=cut
+=head2 $csop = Citrix::SessOp->new($farmctx);
 
-package Citrix::SessOp;
-
-our $VERSION = "0.24";
-
-#use strict;
-#use warnings;
-
-=head2 my $cop = Citrix::SessOp->new($farmctx);
-
-Create a new Citrix session operation by L<Citrix::Farm> context ($fc).
+Create a new Citrix session operation by L<Citrix::Farm> context ($farmctx).
 The ops available later are disconnect() / logoff() (See method docs on each for details).
 Return session operation instance.
 
